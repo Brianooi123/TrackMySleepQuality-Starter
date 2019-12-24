@@ -34,13 +34,13 @@ class SleepTrackerViewModel(
         application: Application) : AndroidViewModel(application) {
     private var viewModelJob = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
-    private var tonight = MutableLiveData<SleepDatabase?>()
+    private var tonight = MutableLiveData<SleepNight?>()
     override fun onCleared() {
         super.onCleared()
         viewModelJob.cancel()
     }
 
-   
+
     init {
         initializeTonight()
     }
@@ -50,10 +50,10 @@ class SleepTrackerViewModel(
         }
     }
     private suspend fun getTonightFromDatabase(): SleepNight? {
-        return withContext(Dispatchers.IO){
+        return withContext(Dispatchers.IO) {
             var night = database.getTonight()
-            if(night?.endTimeMilli != night?.startTimeMilli){
-                night=null
+            if (night?.endTimeMilli != night?.startTimeMilli) {
+                night = null
             }
             night
         }
